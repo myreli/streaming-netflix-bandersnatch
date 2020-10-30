@@ -1,13 +1,24 @@
+const MANIFEST_URL = 'manifest.json'
+const localHost = ['127.0.0.1', 'localhost']
+
 async function main() {
-    const player = videojs('vid');
-    const ModalDialog = videojs.getComponent('ModalDialog');
-    const modal = new ModalDialog(player, {
-        temporary: false, 
-        closeable: true
-    });
+    const isLocal = !!~localHost.indexOf(window.location.hostname)
+    const manifest = await (await fetch(MANIFEST_URL)).json()
+    console.log(isLocal)
+    console.log(manifest)
+    const host = isLocal ? manifest.localHost : manifest.productionHost
 
-    player.addChild(modal);
+    const videoComponent = new VideoComponent()
 
+    const network = new Network({ host })
+
+    const videoPlayer = new VideoMediaPlayer({
+        manifest,
+        network
+    })
+
+    videoPlayer.initializeCodec()
+    videoComponent.initializePlayer()
 }
 
 window.onload = main

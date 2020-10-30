@@ -1,0 +1,33 @@
+{
+  "name": "streaming-netflix-bandersnatch",
+  "version": "1.0.0",
+  "description": "Streaming engine based on Netflix's Bandersnatch",
+  "main": "index.js",
+  "scripts": {
+    "dev:assets": "npx http-server --cors -p 8081 assets/",
+    "dev:public": "npx http-server --cors -p 8080 public/",
+    "dev": "concurrently \"npm:dev:assets\" \"npm:dev:public\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myreli/js-streaming-netflix-bandersnatch.git"
+  },
+  "keywords": [
+    "javascript",
+    "node",
+    "bandersnatch",
+    "netflix",
+    "streaming"
+  ],
+  "author": "myreli",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/myreli/js-streaming-netflix-bandersnatch/issues"
+  },
+  "homepage": "https://github.com/myreli/js-streaming-netflix-bandersnatch#readme",
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "http-server": "^0.12.3"
+  }
+}
