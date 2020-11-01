@@ -18,7 +18,7 @@ class Network {
         const response = await fetch(url)
         await response.arrayBuffer()
         const endMs = Date.now()
-        const durationInMs = (endMs = startMs)
+        const durationInMs = (endMs - startMs)
 
         // TODO: foi feito calculo da duração em vez do throughput para simplificar
 
