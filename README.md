@@ -1,5 +1,7 @@
 # js-streaming-netflix-bandersnatch
 
+Acesse [https://bandersnatch.myreli.vercel.app/](https://bandersnatch.myreli.vercel.app/). 
+
 Implementação JavaScript de uma ferramenta de _streaming_ baseada no filme interativo [Black Mirror: Bandersnatch da Netflix](https://www.netflix.com/br/title/80988062):
 
 - Streaming se adapta a diferentes velocidades de conexão
@@ -55,6 +57,12 @@ npm install
 # execute no git bash ou outro terminal com comandos unix
 ./script.sh
 ```
+
+## Deploy 
+
+Por padrão, o deploy é feito no Vercel, através dos comandos: `npm run deploy` para subir a aplicação e `npm run deploy:assets` para subir as mídias na CDN. 
+
+Ao executar pela primeira vez, será solicitado o login no [vercel](https://vercel.com), então é necessário criar uma conta.
 
 ## Páginas
 
