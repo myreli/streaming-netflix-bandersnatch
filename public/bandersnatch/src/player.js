@@ -1,11 +1,14 @@
 class VideoMediaPlayer {
-    constructor({ manifest, network }) {
+    constructor({ manifest, network, videoComponent }) {
         this.manifest = manifest
         this.network = network
+        this.videoComponent = videoComponent
         this.videoElement = null
         this.sourceBuffer = null
         this.selected = {}
         this.videoDuration = 0
+        this.activeItem = {}
+        this.selections = []
     }
 
     initializeCodec() {
@@ -36,13 +39,67 @@ class VideoMediaPlayer {
 
             mediaSource.duration = this.videoDuration // não definir a duração deixa o vídeo como "LIVE" - assim como na netflix bandersnatch 
             await this.fileDownload(selected.url)
+            setInterval(this.waitForQuestions.bind(this), 200)
         }
     }
 
+    waitForQuestions() {
+        const currentTime = parseInt(this.videoElement.currentTime)
+
+        const option = this.selected.at === currentTime
+
+        if(!option) return
+
+        if(this.activeItem.url === this.selected.url) return
+
+        this.videoComponent.configureModal(this.selected.options)
+
+        this.activeItem = this.selected
+    }
+
+    async currentFileResolution() {
+        const LOWEST_RESOLUTION = 144
+        const prepareUrl = {
+            // TODO: disponibilizar um arquivo de vídeo ainda menor, somente para calcular o throughput 
+            url: this.manifest.finalizar.url,
+            fileResolution: LOWEST_RESOLUTION,
+            fileResolutionTag: this.manifest.fileResolutionTag,
+            hostTag: this.manifest.hostTag
+        }
+
+        const url = this.network.parseManifestUrl(prepareUrl)
+        return this.network.getProperResolution(url)
+    }
+
+    async nextChunk(data) {
+        const key = data.toLowerCase()
+        const selected = this.manifest[key]
+        this.selected = {
+            ...selected,
+            at: parseInt(this.videoElement.currentTime + selected.at)
+        }
+
+        this.manageLag(this.selected)
+        this.videoElement.play()
+
+        await this.fileDownload(selected.url)
+    }
+
+    // TODO: melhorar o gerenciamento de lag utilizando os cálculos de tempo (start e end) de forma dinamica
+    async manageLag(selected) {
+        if(!!~this.selections.indexOf(selected.url)) {
+            selected.at += 5
+            return
+        }
+
+        this.selections.push(selected.url)
+    }
+
     async fileDownload(url) {
+        const fileResolution = await this.currentFileResolution()
         const prepareUrl = {
             url,
-            fileResolution: 360,
+            fileResolution,
             fileResolutionTag: this.manifest.fileResolutionTag,
             hostTag: this.manifest.hostTag
         }
@@ -60,7 +117,7 @@ class VideoMediaPlayer {
     setVideoPlayerDuration(finalUrl) {
         const bars = finalUrl.split('/')
         const [name, videoDuration ] = bars[bars.length - 1].split('-')
-        this.videoDuration += videoDuration
+        this.videoDuration += parseFloat(videoDuration)
     }
 
     async processBufferSegments(allSegments) {

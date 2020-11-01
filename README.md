@@ -3,9 +3,16 @@
 Implementação JavaScript de uma ferramenta de _streaming_ baseada no filme interativo [Black Mirror: Bandersnatch da Netflix](https://www.netflix.com/br/title/80988062):
 
 - Streaming se adapta a diferentes velocidades de conexão
-- Streaming interativo com o usuário
+- Streaming interativo a partir de escolhas do usuário
+- Download de vídeo em fragmentos (chunks)
 
 ## Desenvolvimento
+
+Se estiver o Docker na sua máquina, basta utilizar o container de desenvolvimento. Para isso, basta abrir o projeto no VSCode, instalar as extensões recomendadas e iniciar o projeto. (Recomendado)
+
+Se não, é necessário [configurar o ambiente](#configurar-o-ambiente).
+
+### Iniciar
 
 ```shell
 # gerar os arquivos nas resoluções necessárias
@@ -15,7 +22,13 @@ sh script.sh
 npm run dev
 ```
 
-Se estiver utilizando container de desenvolvimento (Docker) basta abrir o projeto no VSCode, instalar as extensões recomendadas e continuar. Se estiver executando localmente:
+Acesse [http://localhost:8080](http://localhost:8080/). 
+
+### Configurar o ambiente
+
+Se não for utilizar o container de desenvolvimento, é necessário fazer a configuração local de acordo com o seu sistema operacional:
+
+#### Mac ou Linux
 
 ```shell
 # instalar as dependencias de renderização de vídeo
@@ -28,6 +41,21 @@ npm install
 sh script.sh
 ```
 
+#### Windows
+
+O melhor é usar [WSL](https://docs.microsoft.com/pt-br/windows/wsl/install-win10), mas também é possível instalar de forma nativa: 
+
+```shell
+# instalar as dependencias de renderização de vídeo
+choco install ffmpeg gpac
+
+# instalar as dependencias
+npm install
+
+# execute no git bash ou outro terminal com comandos unix
+./script.sh
+```
+
 ## Páginas
 
 ### Lista de Títulos
@@ -37,6 +65,10 @@ sh script.sh
 ### Vídeo
 
 ![página do vídeo](./prints/demo.png)
+
+## TODO
+
+- Refatorar para tentar usar [DASH](https://www.youtube.com/watch?v=CPFE34ngysU)
 
 ## Créditos
 - Esse projeto foi construído durante o evento [Semana JS Expert](https://javascriptexpert.com.br) com [Erick Wendel](https://erickwendel.com.br/)
